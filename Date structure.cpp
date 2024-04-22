@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib> 
 
 using namespace std;
 
 void clear()
 {
-    printf("\33[2J\33[1;1H");
+    cout << "\33[2J\33[1;1H"; 
 }
 
 struct Date {
@@ -24,7 +25,7 @@ struct Date {
         }
     }
 
-    friend void printDate(vector<Date> dates);
+    friend void printDate(const vector<Date>& dates);
 
     void newDate(vector<Date>& dates) 
     {
@@ -44,54 +45,32 @@ struct Date {
         }
     }
 
-    
-    void getDayOfWeek(vector<Date> dates) 
+    void getDayOfWeek(const vector<Date>& dates) 
     {
         int n, month, year, dayOfWeek;
-        cout<<"Enter the Index of date you want to know the day of the week: ";
-        cin>>n;
+        cout << "Enter the Index of date you want to know the day of the week: ";
+        cin >> n;
         if (n >= 0 && n < dates.size()) {
-                int month;
-                if (dates[n].year % 4 == 0) {
-                    switch (dates[n].month) 
-                    {
-                        case 1: month = 0; break;
-                        case 2: month = 3; break;
-                        case 3: month = 4; break;
-                        case 4: month = 0; break;
-                        case 5: month = 2; break;
-                        case 6: month = 5; break;
-                        case 7: month = 0; break;
-                        case 8: month = 3; break;
-                        case 9: month = 6; break;
-                        case 10: month = 1; break;
-                        case 11: month = 4; break;
-                        case 12: month = 6; break;
-                        default: break;
-                    }
-                } else {
-                    switch (dates[n].month) 
-                    {
-                        case 1: month = 1; break;
-                        case 2: month = 4; break;
-                        case 3: month = 4; break;
-                        case 4: month = 0; break;
-                        case 5: month = 2; break;
-                        case 6: month = 5; break;
-                        case 7: month = 0; break;
-                        case 8: month = 3; break;
-                        case 9: month = 6; break;
-                        case 10: month = 1; break;
-                        case 11: month = 4; break;
-                        case 12: month = 6; break;
-                        default: break;
-                    }
-                }
-                year = (6 + dates[n].year%100 + (dates[n].year%100/4)) % 7;
-                dayOfWeek = (dates[n].day + month + year)% 7;
-                cout<<"Day of week for "<<dates[n].day<<"/"<<dates[n].month<<"/"<<dates[n].year<<" is ";
-            switch (dayOfWeek)  
-            {
+            month = (dates[n].year % 4 == 0) ? 0 : 1;
+            switch (dates[n].month) {
+                case 1: month += 0; break;
+                case 2: month += 3; break;
+                case 3: month += 4; break;
+                case 4: month += 0; break;
+                case 5: month += 2; break;
+                case 6: month += 5; break;
+                case 7: month += 0; break;
+                case 8: month += 3; break;
+                case 9: month += 6; break;
+                case 10: month += 1; break;
+                case 11: month += 4; break;
+                case 12: month += 6; break;
+                default: break;
+            }
+            year = (6 + dates[n].year % 100 + (dates[n].year % 100 / 4)) % 7;
+            dayOfWeek = (dates[n].day + month + year) % 7;
+            cout << "Day of week for " << dates[n].day << "/" << dates[n].month << "/" << dates[n].year << " is ";
+            switch (dayOfWeek) {
                 case 0: cout << "Saturday \n"; break;
                 case 1: cout << "Sunday \n"; break;
                 case 2: cout << "Monday \n"; break;
@@ -105,17 +84,15 @@ struct Date {
         }
     }
 
-    int calculateDays(vector<Date> dates, int counter){
-        int days;
+    int calculateDays(const vector<Date>& dates, int counter)
+    {
+        int days = 0;
         counter--;
-        while(counter!=0)
+        while (counter != 0)
         {
-            if(counter == 2)
-            {
+            if (counter == 2) {
                 days += 28;
-            } 
-            else if(counter == 4 || counter == 6 || counter == 9 || counter == 11 )
-            {
+            } else if (counter == 4 || counter == 6 || counter == 9 || counter == 11) {
                 days += 30;
             } else {
                 days += 31;
@@ -125,37 +102,34 @@ struct Date {
         return days;
     }
 
-    void calculateDifference(vector<Date> dates) {
+    void calculateDifference(const vector<Date>& dates)
+    {
         int n1, n2, counter1, counter2;
         long long diffInYears, difference, c1, c2;
-        cout<<"Enter two indexes of date you want to calculate difference: ";
-        cin>>n1>>n2;
+        cout << "Enter two indexes of date you want to calculate difference: ";
+        cin >> n1 >> n2;
         diffInYears = abs(dates[n1].year - dates[n2].year);
-        if(diffInYears>4) diffInYears+=diffInYears/4;
+        if (diffInYears > 4) diffInYears += diffInYears / 4;
         counter1 = dates[n1].month;
         counter2 = dates[n2].month;
         c1 = calculateDays(dates, counter1);
         c2 = calculateDays(dates, counter2);
         c1 += dates[n1].day;
         c2 += dates[n2].day;
-        if(dates[n1].year > dates[n2].year)
-        {
-            difference = c1 - c2 + diffInYears*365;
+        if (dates[n1].year > dates[n2].year) {
+            difference = c1 - c2 + diffInYears * 365;
         } else {
-            difference = c2 - c1 + diffInYears*365;
+            difference = c2 - c1 + diffInYears * 365;
         }
-        cout<<"There is " << difference << " days difference" << endl;
+        cout << "There is " << difference << " days difference" << endl;
     }
-        
-
 };
 
-void printDate(vector<Date> dates) {
-    cout << "Dates:"<<endl;
-    for (const auto& d : dates) 
-    {
-        switch(d.month)
-        {
+void printDate(const vector<Date>& dates)
+{
+    cout << "Dates:" << endl;
+    for (const auto& d : dates) {
+        switch (d.month) {
             case 1: cout << "January "; break;
             case 2: cout << "February "; break;
             case 3: cout << "March "; break;
@@ -176,39 +150,33 @@ void printDate(vector<Date> dates) {
 int main() {
     vector<Date> dates;
     Date date;
-    int n; 
-    while(n!=0)
-    {
-        cout<<"This is Date structure"<<endl;
-        cout<<"These are some functions:"<<endl;
-        cout<<"1. Add new date."<<endl;
-        cout<<"2. Return the day of the week for a date."<<endl;
-        cout<<"3. Calculate the difference in days between two dates."<<endl;
-        cout<<"4. Print the dates."<<endl;
-        cout<<"0. End the programm."<<endl;
-        cout<<"Enter the number of function: ";
-        cin>>n;
-        if(n==1)
-        {
+    int n = -1;
+    while (n != 0) {
+        cout << "This is Date structure" << endl;
+        cout << "These are some functions:" << endl;
+        cout << "1. Add new date." << endl;
+        cout << "2. Return the day of the week for a date." << endl;
+        cout << "3. Calculate the difference in days between two dates." << endl;
+        cout << "4. Print the dates." << endl;
+        cout << "0. End the program." << endl;
+        cout << "Enter the number of function: ";
+        cin >> n;
+        if (n == 1) {
             clear();
             date.newDate(dates);
         }
-        if(n==2)
-        {
+        if (n == 2) {
             clear();
             date.getDayOfWeek(dates);
         }
-        if(n==3)
-        {
+        if (n == 3) {
             clear();
             date.calculateDifference(dates);
         }
-        if(n==4)
-        {
+        if (n == 4) {
             clear();
             printDate(dates);
         }
     }
-    
     return 0;
 }
