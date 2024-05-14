@@ -126,7 +126,8 @@ struct Date {
     }
 };
 
-bool compareDates(const Date& date1, const Date& date2) {
+bool compareDates(const Date& date1, const Date& date2) 
+{
     if (date1.year != date2.year)
         return date1.year < date2.year;
     if (date1.month != date2.month)
@@ -183,10 +184,10 @@ int main() {
             date.calculateDifference(dates);
         }
         if (n == 4) {
-        clear();
-        sort(dates.begin(), dates.end(), compareDates);
-        printDate(dates);
-    }
+            clear();
+            sort(dates.begin(), dates.end(), compareDates);
+            printDate(dates);
+        }
     }
     return 0;
 }
